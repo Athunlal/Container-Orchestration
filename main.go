@@ -30,7 +30,7 @@ type User struct {
 }
 
 func connectDB() {
-	psqlInfo := fmt.Sprintf("host=172.17.0.2 port=5432 user=postgres dbname=docker password=pass sslmode=disable")
+	psqlInfo := fmt.Sprintf("host=db port=5432 user=postgres dbname=docker password=pass sslmode=disable")
 
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
