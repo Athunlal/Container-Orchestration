@@ -5,6 +5,17 @@ networks:
     external: true
 
 services:
+  myapp:
+    image: myapp
+    container_name: myapp
+    ports:
+      - "9000:9000"
+    networks:
+      - athun
+    depends_on:
+      - db
+    restart: on-failure
+    
 
   db:
     image: postgres:latest
@@ -18,17 +29,4 @@ services:
     networks:
       - athun
 
-  myapp:
-    image: myapp
-    container_name: myapp
-    ports:
-      - "9000:9000"
-    networks:
-      - athun
-    depends_on:
-      - db
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+ 

@@ -10,5 +10,6 @@ COPY . .
 
 RUN go build -o myapp
 
+EXPOSE 9000
 
 CMD ["./myapp"]

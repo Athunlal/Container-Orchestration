@@ -11,7 +11,9 @@ import (
 var DB *gorm.DB
 
 func init() {
-	connectDB()
+	if err := connectDB(); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 func main() {
@@ -29,19 +31,20 @@ type User struct {
 	Email      string
 }
 
-func connectDB() {
+func connectDB() error {
 	psqlInfo := fmt.Sprintf("host=db port=5432 user=postgres dbname=docker password=pass sslmode=disable")
 
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to the database")
+		return err
 	}
 	err = db.AutoMigrate(&User{})
 	if err != nil {
-		panic("Failed to auto-migrate database")
+		return err
 	}
 
 	DB = db
+	return nil
 }
 
 func set(ctx *gin.Context) {
