@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  athun:
+    external: true
+
+services:
+
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: docker
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: postgres
+    ports:
+      - "5431:5432"
+    networks:
+      - athun
+
+  myapp:
+    image: myapp
+    container_name: myapp
+    ports:
+      - "9000:9000"
+    networks:
+      - athun
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
